@@ -1,4 +1,4 @@
-package com.lfp;
+package com.lfp.dp;
 
 /**
  * This class finds the number of unqiue routes from start

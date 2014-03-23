@@ -1,4 +1,4 @@
-package com.lfp;
+package com.lfp.dp;
 
 /**
  * Given the values in a matrix, this class calculates the
