@@ -11,19 +11,31 @@ package com.lfp.dp;
 public class MatrixMaximumValueRouteWithMemo {
 
 	// variable to keep track of recursive calls to countPaths method
-	private static int recursiveCalls = 0;
+	private int numRecursiveCalls = 0;
 	// matrix to store intermediate results
-	private static Integer[][] memo;
+	private Integer[][] memo;
 
-	public static int getMaxPath(int[][] matrix) {
-		recursiveCalls = 0;
-		// initialize memo & start from the top left cell in matrix
-		memo = new Integer[matrix.length][matrix[0].length];
-		return getMaxPath(matrix, 0, 0);
+	public int getNumRecursiveCalls() {
+		return numRecursiveCalls;
 	}
 
-	public static int getMaxPath(int[][] matrix, int n, int m) {
-		recursiveCalls++;
+	public void incrementNumRecursiveCalls() {
+		numRecursiveCalls++;;
+	}
+
+	public Integer[][] getMemo() {
+		return memo;
+	}
+
+	public int getMaxValuePath(int[][] matrix) {
+		numRecursiveCalls = 0;
+		// initialize memo & start from the top left cell in matrix
+		memo = new Integer[matrix.length][matrix[0].length];
+		return getMaxValuePath(matrix, 0, 0);
+	}
+
+	public int getMaxValuePath(int[][] matrix, int n, int m) {
+		incrementNumRecursiveCalls();
 		if(n < matrix.length && m < matrix[0].length) {
 			if(n == matrix.length-1 && m == matrix[0].length-1) {
 				// Store cell value in memo if we reach to E and return it
@@ -37,8 +49,8 @@ public class MatrixMaximumValueRouteWithMemo {
 			if(memo[n][m] != null) {
 				return memo[n][m];
 			}
-			int bottom = getMaxPath(matrix, n+1, m);
-			int right = getMaxPath(matrix, n, m+1);
+			int bottom = getMaxValuePath(matrix, n+1, m);
+			int right = getMaxValuePath(matrix, n, m+1);
 			// take the max value for a node in decision tree
 			int max = Math.max(bottom, right);
 			// Add cell value to the max value from left or right child
@@ -50,12 +62,14 @@ public class MatrixMaximumValueRouteWithMemo {
 	}
 
 	// utility program for printing memo
-	public static void printResults() {
+	public void printResults() {
 		System.out.println("Memo:");
 		for(Integer[] row : memo) {
+			System.out.print("{");
 			for(Integer col : row) {
-				System.out.printf("%6d", col);
+				System.out.print(col+",");
 			}
+			System.out.print("},");
 			System.out.println();
 		}
 		System.out.println();
@@ -86,15 +100,15 @@ public class MatrixMaximumValueRouteWithMemo {
 				{1,13,2,11,4,25,3,4},
 				{10,20,4,8,9,21,3,9}
 		};
-
+		MatrixMaximumValueRouteWithMemo m = new MatrixMaximumValueRouteWithMemo();
 		String info = "Matrix Dimensions %s; Max Path Value=%s; Recursive Calls=%s";
-		System.out.println(String.format(info, "2x2", getMaxPath(matrix1), recursiveCalls));
-		printResults();
-		System.out.println(String.format(info, "3x3", getMaxPath(matrix2), recursiveCalls));
-		printResults();
-		System.out.println(String.format(info, "3x8", getMaxPath(matrix3), recursiveCalls));
-		printResults();
-		System.out.println(String.format(info, "8x8", getMaxPath(matrix4), recursiveCalls));
-		printResults();
+		System.out.println(String.format(info, "2x2", m.getMaxValuePath(matrix1), m.getNumRecursiveCalls()));
+		m.printResults();
+		System.out.println(String.format(info, "3x3", m.getMaxValuePath(matrix2), m.getNumRecursiveCalls()));
+		m.printResults();
+		System.out.println(String.format(info, "3x8", m.getMaxValuePath(matrix3), m.getNumRecursiveCalls()));
+		m.printResults();
+		System.out.println(String.format(info, "8x8", m.getMaxValuePath(matrix4), m.getNumRecursiveCalls()));
+		m.printResults();
 	}
 }
